@@ -10,20 +10,34 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'user'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     user_name = Column(String(250), nullable=False)
-    follower = Column(Integer(50))
-    following = Column(Integer(50))
+    first_name = Column(String(25))
+    last_name = Column(String(25))
     description = Column (String(250))
+    email = Column (String(50), nullable=False)
+
+class Comment(Base):
+    __tablename__ = 'comment'
+    id = Column(Integer, primary_key=True)
+    comment_text = Column(String(250))
+    user_id= Column(Integer, ForeignKey('user.id'))
+    user=relationship(User)
+    post_id= Column(Integer, ForeignKey('post.id'))
+    # post=relationship(Post)
 
 class Post(Base):
-    __tablename__ = 'posts'
+    __tablename__ = 'post'
     id = Column(Integer, primary_key=True)
-    like = Column(Integer(250))
-    saves = Column(Integer(250))
-    description = Column(String(999))
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user=relationship(User)
+    
+class Media(Base):
+    __tablename__ = 'media'
+    id = Column(Integer, primary_key=True)
+    url = Column(String(250))
+    post_id = Column(Integer, ForeignKey('post.id'))
+    post= relationship(Post)
     
 
     def to_dict(self):
