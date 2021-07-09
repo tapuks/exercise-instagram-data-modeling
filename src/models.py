@@ -8,36 +8,81 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class User(Base):
-    __tablename__ = 'user'
+class Student(Base):
+    __tablename__ = 'student'
     id = Column(Integer, primary_key=True)
-    user_name = Column(String(250), nullable=False)
-    first_name = Column(String(25))
-    last_name = Column(String(25))
-    description = Column (String(250))
-    email = Column (String(50), nullable=False)
+    full_name = Column(String(250), nullable=False)
+    email = Column(String(25),nullable=False)
+    password = Column(String(25),nullable=False)
+    is_active = Column (String(250))
+    promo = Column (String(50), nullable=False)
 
-class Comment(Base):
-    __tablename__ = 'comment'
+class Teacher(Base):
+    __tablename__ = 'teacher'
     id = Column(Integer, primary_key=True)
-    comment_text = Column(String(250))
-    user_id= Column(Integer, ForeignKey('user.id'))
-    user=relationship(User)
-    post_id= Column(Integer, ForeignKey('post.id'))
-    # post=relationship(Post)
+    full_name = Column(String(250))
+    email = Column(String(25),nullable=False)
+    password = Column(String(25),nullable=False)
+    linkedin = Column(String(250))
+    type_of_teacher = Column(String(250))
+    is_active = Column (String(250))
+    promo = Column (String(50), nullable=False)
+    # user_id= Column(Integer, ForeignKey('user.id'))
+    # user=relationship(User)
+    # post_id= Column(Integer, ForeignKey('post.id'))
+#     # post=relationship(Post)
 
-class Post(Base):
-    __tablename__ = 'post'
+class School(Base):
+    __tablename__ = 'school'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
-    user=relationship(User)
-    
-class Media(Base):
-    __tablename__ = 'media'
+    name = Column (String(250))
+    img_url = Column (String(250))
+    # user_id = Column(Integer, ForeignKey('user.id'))
+    # user=relationship(User)
+
+class School_student(Base):
+    __tablename__ = 'school_student'
+    student_id = Column(Integer, ForeignKey('student.id'),primary_key=True)
+    school_id = Column(Integer, ForeignKey('school.id'),primary_key=True)
+    student = relationship(Student)
+    school = relationship(School) 
+
+class School_teacher(Base):
+    __tablename__ = 'school_teacher'
+    teacher_id = Column(Integer, ForeignKey('student.id'),primary_key=True)
+    school_id = Column(Integer, ForeignKey('school.id'),primary_key=True)
+    teacher = relationship(Teacher)
+    school = relationship(School)  
+
+class Review(Base):
+    __tablename__ = 'review'
     id = Column(Integer, primary_key=True)
-    url = Column(String(250))
-    post_id = Column(Integer, ForeignKey('post.id'))
-    post= relationship(Post)
+    dynamsim = Column(Integer())
+    pasion = Column(Integer())
+    practises_example = Column(Integer())
+    near = Column(Integer())
+    date_teacher = Column(String(250))
+    more_info = Column(String(500), unique=False, nullable=True)
+    gif = Column(String(50), unique=False, nullable=True)
+    teacher_id = Column(Integer, ForeignKey('teacher.id'))
+    teacher = relationship(Teacher)
+    student_id = Column(Integer, ForeignKey('student.id'))
+    student = relationship(Student)
+
+class Alumn_teacher(Base):
+    __tablename__ = 'alumn_teacher'
+    id = Column(Integer, primary_key=True)
+    teacher_id = Column(Integer, ForeignKey('teacher.id'))
+    teacher = relationship(Teacher)
+    student_id = Column(Integer, ForeignKey('student.id'))
+    student = relationship(Student)
+
+# class Media(Base):
+#     __tablename__ = 'media'
+#     id = Column(Integer, primary_key=True)
+#     url = Column(String(250))
+#     post_id = Column(Integer, ForeignKey('post.id'))
+#     post= relationship(Post)
     
 
     def to_dict(self):
